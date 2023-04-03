@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="IE=edge"
+		/>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<link
+			rel="stylesheet"
+			href="style.css"
+		/>
+		<title>SAE Paghjella</title>
+	</head>
+	<body>
+		<section id="svgs">
+			<svg
+				id="voice"
+				viewBox="0 0 450 841.89"
+			>
+				<g
+					class="availableVoice"
+					id="seconda"
+					stroke="#ed651d"
+				>
+					<line
+						class="line"
+						x1="225"
+						x2="225"
+						y2="841.89"
+						stroke-width="210"
+					/>
+					<path
+						class="right-circle"
+						d="M330,488.72c8.28,0,15,6.72,15,15s-6.72,15-15,15-15-6.72-15-15"
+						fill="none"
+						stroke-width="30"
+					/>
+					<path
+						class="left-circle"
+						d="M120,308.72c-8.28,0-15-6.72-15-15,0-8.28,6.72-15,15-15,8.28,0,15,6.72,15,15"
+						fill="none"
+						stroke-width="30"
+					/>
+				</g>
+
+				<g
+					class="availableVoice"
+					id="bassu"
+					stroke="#f28327"
+				>
+					<line
+						class="line"
+						x1="225"
+						x2="225"
+						y2="841.89"
+						stroke-width="150"
+					/>
+					<path
+						class="right-circle"
+						d="M330,458.72c24.85,0,45,20.15,45,45s-20.15,45-45,45-45-20.15-45-45"
+						fill="none"
+						stroke-width="30"
+					/>
+					<path
+						class="left-circle"
+						d="M120,338.72c-24.85,0-45-20.15-45-45,0-24.85,20.15-45,45-45,24.85,0,45,20.15,45,45"
+						fill="none"
+						stroke-width="30"
+					/>
+				</g>
+
+				<g
+					class="availableVoice"
+					id="terza"
+					stroke="#f6a117"
+				>
+					<line
+						class="line"
+						x1="225"
+						x2="225"
+						y2="841.89"
+						stroke-width="90"
+					/>
+					<path
+						class="right-circle"
+						d="M330,428.72c41.42,0,75,33.58,75,75s-33.58,75-75,75-75-33.58-75-75"
+						fill="none"
+						stroke-width="30"
+					/>
+					<path
+						class="left-circle"
+						d="M120,368.72c-41.42,0-75-33.58-75-75,0-41.42,33.58-75,75-75,41.42,0,75,33.58,75,75"
+						fill="none"
+						stroke-width="30"
+					/>
+				</g>
+
+				<g
+					id="harmony"
+					stroke="#1d1d1d"
+				>
+					<line
+						class="line"
+						x1="225"
+						x2="225"
+						y2="841.89"
+						stroke-width="30"
+					/>
+					<path
+						class="right-circle"
+						d="M330,398.72c57.99,0,105,47.01,105,105s-47.01,105-105,105-105-47.01-105-105"
+						fill="none"
+						stroke-width="30"
+					/>
+					<path
+						class="left-circle"
+						d="M120,398.72c-57.99,0-105-47.01-105-105,0-57.99,47.01-105,105-105,57.99,0,105,47.01,105,105"
+						fill="none"
+						stroke-width="30"
+					/>
+				</g>
+			</svg>
+		</section>
+
+		<button
+			id="play-sound"
+			class="enjoy-css"
+		>
+			<span>Play Sound</span>
+		</button>
+
+		<!-- add cdn for anime.js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				setup()
+
+				const playButton = document.querySelector('#play-sound')
+				playButton.addEventListener('click', () => {
+					playButton.classList.add('loading')
+					setTimeout(() => {
+						playButton.classList.remove('loading')
+						playButton.style.display = 'none'
+						playSound()
+					}, 2000)
+				})
+			})
+
+			function playSound() {
+				// Créez un contexte audio
+				let context = new AudioContext()
+
+				// Créez des éléments Audio pour les pistes audio
+				let bassuAudio = new Audio('audio/bassu.mp3')
+				let secondaAudio = new Audio('audio/seconda.mp3')
+				let terzaAudio = new Audio('audio/terza.mp3')
+
+				// Créez des nœuds de source pour les pistes audio
+				let bassuSource = context.createMediaElementSource(bassuAudio)
+				let secondaSource = context.createMediaElementSource(secondaAudio)
+				let terzaSource = context.createMediaElementSource(terzaAudio)
+
+				// Créez des nœuds d'analyseur de volume pour chaque piste audio
+				let bassuAnalyser = context.createAnalyser()
+				let secondaAnalyser = context.createAnalyser()
+				let terzaAnalyser = context.createAnalyser()
+
+				// Connectez les nœuds de source à leur analyseur de volume respectif
+				bassuSource.connect(bassuAnalyser)
+				secondaSource.connect(secondaAnalyser)
+				terzaSource.connect(terzaAnalyser)
+
+				// Connectez les analyseurs de volume à la destination (le contexte audio)
+				bassuAnalyser.connect(context.destination)
+				secondaAnalyser.connect(context.destination)
+				terzaAnalyser.connect(context.destination)
+
+				// Déterminez le niveau sonore en temps réel pour chaque piste audio
+				let bassuDataArray = new Uint8Array(bassuAnalyser.frequencyBinCount)
+				let secondaDataArray = new Uint8Array(secondaAnalyser.frequencyBinCount)
+				let terzaDataArray = new Uint8Array(terzaAnalyser.frequencyBinCount)
+
+				function update() {
+					requestAnimationFrame(update)
+					bassuAnalyser.getByteFrequencyData(bassuDataArray)
+					secondaAnalyser.getByteFrequencyData(secondaDataArray)
+					terzaAnalyser.getByteFrequencyData(terzaDataArray)
+
+					// Calculez le niveau sonore moyen pour chaque piste audio
+					let bassuSum = 0
+					for (let i = 0; i < bassuDataArray.length; i++) {
+						bassuSum += bassuDataArray[i]
+					}
+					let bassuAverage = bassuSum / bassuDataArray.length
+
+					let secondaSum = 0
+					for (let i = 0; i < secondaDataArray.length; i++) {
+						secondaSum += secondaDataArray[i]
+					}
+					let secondaAverage = secondaSum / secondaDataArray.length
+
+					let terzaSum = 0
+					for (let i = 0; i < terzaDataArray.length; i++) {
+						terzaSum += terzaDataArray[i]
+					}
+					let terzaAverage = terzaSum / terzaDataArray.length
+
+					// Ajustez la propriété filter des éléments en fonction du niveau sonore
+					let bassuElement = document.querySelector('#bassu')
+					bassuElement.style.filter = `brightness(${0.5 + bassuAverage / 100})`
+					console.log('bassu: ', 0.5 + bassuAverage / 100)
+
+					let secondaElement = document.querySelector('#seconda')
+					secondaElement.style.filter = `brightness(${0.5 + secondaAverage / 100})`
+					console.log('seconda: ', 0.5 + secondaAverage / 100)
+
+					let terzaElement = document.querySelector('#terza')
+					terzaElement.style.filter = `brightness(${0.5 + terzaAverage / 100})`
+					console.log('terza: ', 0.5 + terzaAverage / 100)
+
+					if (bassuAverage > 5 && secondaAverage > 5 && terzaAverage > 5) {
+						let harmonyElement = document.querySelector('#harmony')
+						harmonyElement.style.stroke = '#f1f1f1'
+					} else {
+						let harmonyElement = document.querySelector('#harmony')
+						harmonyElement.style.stroke = '#1d1d1d'
+					}
+				}
+
+				// Commencez à lire les pistes audio
+				bassuAudio.play()
+				secondaAudio.play()
+				terzaAudio.play()
+
+				// Appelez la fonction update pour mesurer le niveau sonore en temps réel
+				update()
+			}
+
+			function setup() {
+				anime({
+					opacity: 1,
+					targets: '#svgs line',
+					strokeDashoffset: [anime.setDashoffset, 0],
+					easing: 'spring(1, 80, 10, 0)',
+					duration: 1000,
+					delay: function (el, i) {
+						return i * 250
+					}
+				})
+				anime({
+					opacity: [0, 1],
+					targets: '#svgs path',
+					strokeDashoffset: [anime.setDashoffset, 0],
+					easing: 'easeInOutSine',
+					duration: 1500,
+					delay: function (el, i) {
+						return i * 250
+					}
+				})
+			}
+		</script>
+	</body>
+</html>
