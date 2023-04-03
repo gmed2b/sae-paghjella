@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:500);
+
 html {
 	height: 100vh;
 	overflow-y: hidden;
@@ -6,10 +8,18 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	font-family: sans-serif;
+	font-family: Raleway, sans-serif;
 	background-color: #1a375f;
 	display: flex;
 	justify-content: center;
+}
+
+#tools {
+	position: absolute;
+	top: 1rem;
+	left: 2rem;
+	display: flex;
+	gap: 1rem;
 }
 
 #svgs {
@@ -18,15 +28,33 @@ body {
 	position: relative;
 }
 
-#svgs #voice {
+#voice {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 }
-#svgs #voice g:not(:last-child) {
+#voice g {
+	transition: stroke 0.5s ease;
+}
+#voice g:not(:last-child) {
 	filter: saturate(0.6) brightness(0.5);
+}
+
+.btn {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	cursor: pointer;
+	font-size: 2rem;
+	font-family: 'Raleway', sans-serif;
+	color: rgba(255, 255, 255);
+	-o-text-overflow: clip;
+	text-overflow: clip;
+	letter-spacing: 3px;
+	background: rgba(0, 0, 0, 1);
+	border: 0px solid transparent;
 }
 
 .enjoy-css {
@@ -35,18 +63,7 @@ body {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	-webkit-box-sizing: content-box;
-	-moz-box-sizing: content-box;
-	box-sizing: content-box;
-	cursor: pointer;
-	padding: 10px 20px;
-	font: normal normal bold 20px / normal 'bebas-neue', Helvetica, sans-serif;
-	color: rgba(255, 255, 255);
-	-o-text-overflow: clip;
-	text-overflow: clip;
-	letter-spacing: 3px;
-	background: rgba(0, 0, 0, 1);
-	border: 0px solid transparent;
+	padding: 1rem;
 }
 
 .enjoy-css:hover {
@@ -85,7 +102,6 @@ body {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.3);
 }
 
 /* :not(:required) hides these rules from IE9 and below */
@@ -183,4 +199,13 @@ body {
 		-o-transform: rotate(360deg);
 		transform: rotate(360deg);
 	}
+}
+
+#volume-control {
+	display: flex;
+	align-items: center;
+}
+
+#stop-button {
+	background: none;
 }

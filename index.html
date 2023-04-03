@@ -12,6 +12,10 @@
 		/>
 		<link
 			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+		/>
+		<link
+			rel="stylesheet"
 			href="style.css"
 		/>
 		<title>SAE Paghjella</title>
@@ -129,26 +133,92 @@
 
 		<button
 			id="play-sound"
-			class="enjoy-css"
+			class="btn enjoy-css"
 		>
-			<span>Play Sound</span>
+			<i class="bi bi-play-fill"></i>
+			Play
 		</button>
 
-		<!-- add cdn for anime.js -->
+		<div id="tools">
+			<button
+				id="stop-button"
+				class="btn"
+				disabled
+			>
+				<i class="bi bi-pause-fill"></i>
+			</button>
+			<div id="volume-control">
+				<i
+					class="bi bi-volume-down"
+					style="color: #f1f1f1"
+				></i>
+				<input
+					type="range"
+					name="volume"
+					id="volume"
+					min="0"
+					max="1"
+					step="0.1"
+					disabled
+				/>
+				<i
+					class="bi bi-volume-up"
+					style="color: #f1f1f1"
+				></i>
+			</div>
+		</div>
+
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
 		<script>
+			let bassuAudio, secondaAudio, terzaAudio
+			let isPlaying = false
+
+			const playButton = document.querySelector('#play-sound')
+			const stopButton = document.querySelector('#stop-button')
+			const volumeControl = document.querySelector('#volume')
+
 			document.addEventListener('DOMContentLoaded', () => {
 				setup()
 
-				const playButton = document.querySelector('#play-sound')
 				playButton.addEventListener('click', () => {
 					playButton.classList.add('loading')
 					setTimeout(() => {
 						playButton.classList.remove('loading')
 						playButton.style.display = 'none'
 						playSound()
+						isPlaying = true
+
+						stopButton.disabled = false
+						volumeControl.disabled = false
 					}, 2000)
+				})
+
+				stopButton.addEventListener('click', () => {
+					const icon = stopButton.querySelector('i')
+					if (isPlaying) {
+						bassuAudio.pause()
+						secondaAudio.pause()
+						terzaAudio.pause()
+						isPlaying = false
+
+						icon.classList.remove('bi-pause-fill')
+						icon.classList.add('bi-play-fill')
+					} else {
+						bassuAudio.play()
+						secondaAudio.play()
+						terzaAudio.play()
+						isPlaying = true
+
+						icon.classList.remove('bi-play-fill')
+						icon.classList.add('bi-pause-fill')
+					}
+				})
+
+				volumeControl.addEventListener('input', () => {
+					bassuAudio.volume = volumeControl.value
+					secondaAudio.volume = volumeControl.value
+					terzaAudio.volume = volumeControl.value
 				})
 			})
 
@@ -157,9 +227,9 @@
 				let context = new AudioContext()
 
 				// Créez des éléments Audio pour les pistes audio
-				let bassuAudio = new Audio('audio/bassu.mp3')
-				let secondaAudio = new Audio('audio/seconda.mp3')
-				let terzaAudio = new Audio('audio/terza.mp3')
+				bassuAudio = new Audio('audio/bassu.mp3')
+				secondaAudio = new Audio('audio/seconda.mp3')
+				terzaAudio = new Audio('audio/terza.mp3')
 
 				// Créez des nœuds de source pour les pistes audio
 				let bassuSource = context.createMediaElementSource(bassuAudio)
@@ -214,15 +284,12 @@
 					// Ajustez la propriété filter des éléments en fonction du niveau sonore
 					let bassuElement = document.querySelector('#bassu')
 					bassuElement.style.filter = `brightness(${0.5 + bassuAverage / 100})`
-					console.log('bassu: ', 0.5 + bassuAverage / 100)
 
 					let secondaElement = document.querySelector('#seconda')
 					secondaElement.style.filter = `brightness(${0.5 + secondaAverage / 100})`
-					console.log('seconda: ', 0.5 + secondaAverage / 100)
 
 					let terzaElement = document.querySelector('#terza')
 					terzaElement.style.filter = `brightness(${0.5 + terzaAverage / 100})`
-					console.log('terza: ', 0.5 + terzaAverage / 100)
 
 					if (bassuAverage > 5 && secondaAverage > 5 && terzaAverage > 5) {
 						let harmonyElement = document.querySelector('#harmony')
@@ -240,6 +307,12 @@
 
 				// Appelez la fonction update pour mesurer le niveau sonore en temps réel
 				update()
+			}
+
+			function stopSound() {
+				bassuAudio.pause()
+				secondaAudio.pause()
+				terzaAudio.pause()
 			}
 
 			function setup() {
