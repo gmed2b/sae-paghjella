@@ -28,7 +28,7 @@
 			>
 				<g
 					class="availableVoice"
-					id="seconda"
+					id="bassu"
 					stroke="#ed651d"
 				>
 					<line
@@ -54,7 +54,7 @@
 
 				<g
 					class="availableVoice"
-					id="bassu"
+					id="seconda"
 					stroke="#f28327"
 				>
 					<line
@@ -131,6 +131,22 @@
 			</svg>
 		</section>
 
+		<p class="desc desc1">
+			La <b>paghjella</b> est un chant traditionnel corse qui utilise trois registres vocaux distincts : <span class="segonda">l'a segonda</span>,
+			<span class="bassu">l'u bassu</span> et <span class="terza">l'a terza</span>.
+		</p>
+
+		<p class="desc desc2">
+			Le chant débute avec <span class="segonda">l'a segonda</span> qui donne le ton et interprète la mélodie principale. Ensuite,
+			<span class="bassu">l'u bassu</span> suit en accompagnant et en soutenant la mélodie, tandis que <span class="terza">l'a terza</span> possède la voix la
+			plus haute et enrichit le chant.
+		</p>
+
+		<p class="desc desc3">
+			Ce type de chant utilise largement l'écho et est généralement interprété a capella. La <b>paghjella</b> est un exemple unique de
+			<span class="harmony">l'harmonie</span> qui peut être créée par l'union des voix et de la culture corses
+		</p>
+
 		<button
 			id="play-sound"
 			class="btn enjoy-css"
@@ -159,6 +175,7 @@
 					min="0"
 					max="1"
 					step="0.1"
+					value="0.3"
 					disabled
 				/>
 				<i
@@ -230,6 +247,9 @@
 				bassuAudio = new Audio('audio/bassu.mp3')
 				secondaAudio = new Audio('audio/seconda.mp3')
 				terzaAudio = new Audio('audio/terza.mp3')
+				bassuAudio.volume = 0.3
+				secondaAudio.volume = 0.3
+				terzaAudio.volume = 0.3
 
 				// Créez des nœuds de source pour les pistes audio
 				let bassuSource = context.createMediaElementSource(bassuAudio)
